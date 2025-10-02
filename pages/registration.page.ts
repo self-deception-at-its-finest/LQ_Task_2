@@ -8,7 +8,8 @@ export class RegistrationPage extends BasePage{
     public passwordConfirmationInput: Locator
     public firstnameInput: Locator
     public lastnameInput: Locator
-    public mailInput: Locator
+    public emailInput: Locator
+    public submitButton: Locator
 
     constructor(page: Page) {
         super(page);
@@ -18,7 +19,22 @@ export class RegistrationPage extends BasePage{
         this.passwordConfirmationInput = page.locator('#user_password_confirmation')
         this.firstnameInput = page.locator('#user_firstname')
         this.lastnameInput = page.locator('#user_lastname')
-        this.mailInput = page.locator('#user_mail')
+        this.emailInput = page.locator('#user_mail')
+        this.submitButton = page.locator('input[type="submit"]')
+    }
+
+    async newUserRegistration(creds?: {
+        login?: string;
+        password?: string;
+        firstname?: string;
+        lastname?: string;
+        email?: string}) {
+        const {login, password, firstname, lastname, email} = creds ?? {}
+        if(login !== undefined) await  this.loginInput.fill(login)
+        if(password !== undefined) await  this.passwordInput.fill(password)
+        if(firstname !== undefined) await  this.firstnameInput.fill(firstname)
+        if(lastname !== undefined) await  this.lastnameInput.fill(lastname)
+        if(email !== undefined) await  this.emailInput.fill(email)
     }
 
     async open(): Promise<void> {
