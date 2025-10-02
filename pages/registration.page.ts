@@ -30,11 +30,12 @@ export class RegistrationPage extends BasePage{
         lastname?: string;
         email?: string}) {
         const {login, password, firstname, lastname, email} = creds ?? {}
-        if(login !== undefined) await  this.loginInput.fill(login)
-        if(password !== undefined) await  this.passwordInput.fill(password)
-        if(firstname !== undefined) await  this.firstnameInput.fill(firstname)
-        if(lastname !== undefined) await  this.lastnameInput.fill(lastname)
-        if(email !== undefined) await  this.emailInput.fill(email)
+        if(login !== undefined) await this.loginInput.fill(login)
+        if(password !== undefined) await this.passwordInput.fill(password)
+        if(password !== undefined) await this.passwordConfirmationInput.fill(password)
+        if(firstname !== undefined) await this.firstnameInput.fill(firstname)
+        if(lastname !== undefined) await this.lastnameInput.fill(lastname)
+        if(email !== undefined) await this.emailInput.fill(email)
     }
 
     async open(): Promise<void> {

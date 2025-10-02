@@ -15,7 +15,7 @@ export class LoginPage extends BasePage{
         this.loginInput = page.locator('#username')
         this.passwordInput = page.locator('#password')
         this.submitButton = page.locator('#login-submit')
-        this.successfulAccountCreationMessage = page.locator('#flash-notice')
+        this.successfulAccountCreationMessage = page.locator('#flash_notice')
     }
 
     async open(): Promise<void> {
