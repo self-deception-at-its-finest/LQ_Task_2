@@ -13,7 +13,6 @@ export class RegistrationPage extends BasePage{
     constructor(page: Page) {
         super(page);
         this.endpoint = endpoints.registration
-
         this.loginInput = page.locator('#user_login')
         this.passwordInput = page.locator('#user_password')
         this.passwordConfirmationInput = page.locator('#user_password_confirmation')
