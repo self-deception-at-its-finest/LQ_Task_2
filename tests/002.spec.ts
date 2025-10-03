@@ -1,5 +1,5 @@
 import { expect, test} from '../fixtures/fixtures'
-import successMessages from '../constants/successMessages.constants.json'
+
 
 test.describe('Login', () => {
     test('Login with Valid Credentials', async ({ loginPage, page }) => {

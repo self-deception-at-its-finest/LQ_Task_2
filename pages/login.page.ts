@@ -8,6 +8,7 @@ export class LoginPage extends BasePage{
     public passwordInput: Locator
     public submitButton: Locator
     public successfulAccountCreationMessage: Locator
+    public errorMessage: Locator
 
     constructor(page: Page) {
         super(page);
@@ -16,6 +17,7 @@ export class LoginPage extends BasePage{
         this.passwordInput = page.locator('#password')
         this.submitButton = page.locator('#login-submit')
         this.successfulAccountCreationMessage = page.locator('#flash_notice')
+        this.errorMessage = page.locator('#flash_error')
     }
 
     async login(creds?: {username?: string; password?: string}) {
