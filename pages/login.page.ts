@@ -18,6 +18,13 @@ export class LoginPage extends BasePage{
         this.successfulAccountCreationMessage = page.locator('#flash_notice')
     }
 
+    async login(creds?: {username?: string; password?: string}) {
+        const {username, password,} = creds ?? {}
+        if(username !== undefined) await this.loginInput.fill(username)
+        if(password !== undefined) await this.passwordInput.fill(password)
+        await this.submitButton.click()
+    }
+
     async open(): Promise<void> {
         await super.open(this.endpoint);
     }
