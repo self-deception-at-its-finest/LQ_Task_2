@@ -2,7 +2,7 @@ import { expect, type Locator, type Page } from '@playwright/test'
 import BasePage from './base.page'
 import endpoints from '../constants/endpoints.constants.json'
 
-export class RegistrationPage extends BasePage{
+export class RegistrationPage extends BasePage {
     public loginInput: Locator
     public passwordInput: Locator
     public passwordConfirmationInput: Locator

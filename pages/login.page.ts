@@ -3,7 +3,7 @@ import BasePage from './base.page'
 import endpoints from '../constants/endpoints.constants.json'
 
 
-export class LoginPage extends BasePage{
+export class LoginPage extends BasePage {
     public loginInput: Locator
     public passwordInput: Locator
     public submitButton: Locator
