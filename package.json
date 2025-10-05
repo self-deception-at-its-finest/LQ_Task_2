@@ -4,13 +4,13 @@
   "description": "Automated tests for Redmine.org",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test",
-    "allure:generate": "allure generate allure-results --clean -o allure-report",
-    "allure:open": "allure open allure-report",
-    "test:debug": "playwright test --debug",
-    "test:headed": "playwright test --headed",
-    "report": "playwright show-report",
-    "install:browsers": "playwright install"
+    "tests": "playwright test -c configs/playwright.config.ts",
+    "tests:headed": "playwright test -c configs/playwright.config.ts --headed",
+    "tests:config:chromium": "playwright test -c configs/playwright.chromium.config.ts",
+    "tests:list": "playwright test -c configs/playwright.config.ts --list",
+    "tests:project": "playwright test -c configs/playwright.config.ts --project firefox",
+    "tests:spec": "playwright test -c configs/playwright.config.ts moreExamples",
+    "report:html:show": "playwright show-report reports/html"
   },
   "keywords": [
     "playwright",
