@@ -15,7 +15,7 @@ concurrency: test
 env:
   BASE_URL: ${{ secrets.BASE_URL }}
   TEST_USER_LOGIN: ${{ secrets.TEST_USER_LOGIN }}
-  TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASWORD }}
+  TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
 
 jobs:
   test:
