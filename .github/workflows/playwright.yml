@@ -1,123 +1,62 @@
-name: Deploy to GitHub Pages
-
+name: Test
 on:
   push:
-    branches: [ main ]
+    branches: [main]
+  pull_request:
+    branches: [main]
+  repository_dispatch:
+    types: [regression]
+  # schedule:
+  #     - cron: '0 9 * * *'
   workflow_dispatch:
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
+concurrency: test
+
+env:
+  BASE_URL: ${{ secrets.BASE_URL }}
+  TEST_USER_LOGIN: ${{ secrets.TEST_USER_LOGIN }}
+  TEST_USER_PASWORD: ${{ secrets.TEST_USER_PASWORD }}
 
 jobs:
-  build-and-deploy:
+  test:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
+    continue-on-error: true
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GH_PAT }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: lts/*
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
+      - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run tests with HTML report
+      - name: Run Playwright tests
         run: npx playwright test --reporter=html
-        env:
-          BASE_URL: ${{ secrets.BASE_URL }}
-          TEST_USER_LOGIN: ${{ secrets.TEST_USER_LOGIN }}
-          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
 
-      - name: Debug - List generated files
+      - name: Verify report generation
         run: |
-          echo "=== Current directory structure ==="
-          ls -la
-          echo "=== Playwright report contents ==="
-          ls -la playwright-report/ || echo "No playwright-report directory"
+          if [ -d "playwright-report" ] && [ -f "playwright-report/index.html" ]; then
+            echo "✅ Playwright report generated"
+          else
+            echo "❌ Playwright report NOT generated"
+            exit 1
+          fi
 
-      - name: Create main index.html
-        run: |
-          cat > index.html << 'EOF'
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Redmine Test Reports</title>
-              <style>
-                  body {
-                      font-family: Arial, sans-serif;
-                      margin: 40px;
-                      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                      min-height: 100vh;
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                  }
-                  .container {
-                      background: white;
-                      padding: 40px;
-                      border-radius: 10px;
-                      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-                      text-align: center;
-                      max-width: 500px;
-                  }
-                  h1 {
-                      color: #2c3e50;
-                      margin-bottom: 10px;
-                  }
-                  .btn {
-                      display: inline-block;
-                      background: #3498db;
-                      color: white;
-                      padding: 15px 30px;
-                      text-decoration: none;
-                      border-radius: 5px;
-                      margin: 10px;
-                      font-weight: bold;
-                  }
-                  .btn:hover {
-                      background: #2980b9;
-                  }
-              </style>
-          </head>
-          <body>
-              <div class="container">
-                  <h1>🚀 Test Reports</h1>
-                  <p>Redmine Playwright Test Automation</p>
-                  <a href="playwright-report/index.html" class="btn">
-                      📊 View Test Report
-                  </a>
-                  <p style="margin-top: 20px; color: #666;">
-                      Generated on: $(date)
-                  </p>
-              </div>
-          </body>
-          </html>
-          EOF
-          
-          
-          echo "=== Final file structure ==="
-          ls -la
-          echo "=== index.html content ==="
-          cat index.html | head -5
-
-      - name: Deploy to GitHub Pages
+      - name: Deploy report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GH_PAT}}
-          publish_dir: ./
           publish_branch: test-reports
-          force_orphan: false
-          keep_files: false
+          publish_dir: ./playwright-report
+          force_orphan: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
